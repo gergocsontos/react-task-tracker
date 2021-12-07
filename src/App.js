@@ -2,18 +2,32 @@ import './App.css';
 import Header from "./components/Header"
 import Tasks from "./components/Tasks"
 import AddTask from "./components/AddTask"
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 
 
 function App() {
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
 
+    useEffect(  () => {
+        const getTasks = async () => {
+            const tasksFromServer = await fetchTasks()
+            setTasks(tasksFromServer)
+        }
+        getTasks()
+    }, [])
+
+    // Fetch Tasks from API
+    const fetchTasks = async () => {
+        const response = await fetch('http://localhost:5000/tasks')
+        return await response.json()
+    }
+
     // Add task
     const addTask = (task) => {
         const id = Math.floor(Math.random() * 10000) + 1
 
-        const newTask = { id, ...task }
+        const newTask = {id, ...task}
         setTasks([...tasks, newTask])
     }
 
@@ -24,16 +38,16 @@ function App() {
 
     // Toggle Reminder
     const toggleReminder = (id) => {
-        setTasks(tasks.map((task) => task.id === id ? { ...task, reminder: !task.reminder} : task))
+        setTasks(tasks.map((task) => task.id === id ? {...task, reminder: !task.reminder} : task))
     }
 
     return (
         <>
             <div className="container">
-                <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask} />
-                {showAddTask && <AddTask onAdd={addTask} />}
+                <Header onAdd={() => setShowAddTask(!showAddTask)} showAdd={showAddTask}/>
+                {showAddTask && <AddTask onAdd={addTask}/>}
                 {tasks.length > 0 ? <Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder}/>
-                : "No tasks to show"}
+                    : "No tasks to show"}
             </div>
         </>
 
