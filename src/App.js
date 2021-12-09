@@ -21,19 +21,19 @@ function App() {
 
     // Fetch Tasks
     async function fetchTasks() {
-        const response = await fetch('http://localhost:5000/tasks')
+        const response = await fetch('/tasks')
         return await response.json()
     }
 
     // Fetch Task
     async function fetchTask(id) {
-        const response = await fetch(`http://localhost:5000/tasks/${id}`)
+        const response = await fetch(`/tasks/${id}`)
         return await response.json()
     }
 
     // Add task
     async function addTask(task) {
-        const response = await fetch('http://localhost:5000/tasks', {
+        const response = await fetch('/tasks', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
@@ -51,7 +51,7 @@ function App() {
 
     //Delete Task
     async function deleteTask(id) {
-        await fetch(`http://localhost:5000/tasks/${id}`, {
+        await fetch(`/tasks/${id}`, {
             method: 'DELETE'
         })
 
@@ -63,7 +63,7 @@ function App() {
         const taskToToggle = await fetchTask(id)
         const updatedTask = {...taskToToggle, reminder: !taskToToggle.reminder}
 
-        const response = await fetch(`http://localhost:5000/tasks/${id}`, {
+        const response = await fetch(`/tasks/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-type': 'application/json'

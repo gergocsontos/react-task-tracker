@@ -13,7 +13,7 @@ function TaskDetails() {
 
     useEffect(() => {
         async function fetchTask() {
-            const response = await fetch(`http://localhost:5000/tasks/${params.id}`)
+            const response = await fetch(`/tasks/${params.id}`)
             const data = await response.json()
 
             if (response.status === 404) {
@@ -24,7 +24,11 @@ function TaskDetails() {
             setLoading(false)
         }
         fetchTask()
-    })
+        //cleanup function
+        return () => {
+            // reverses code in the useEffect block
+        }
+    }, [params.id])
 
     if (error) {
         navigate('/')
